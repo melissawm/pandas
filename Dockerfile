@@ -1,3 +1,4 @@
+FROM gitpod/workspace-base:latest
 FROM quay.io/condaforge/miniforge3
 
 # if you forked pandas, you can pass in your own GitHub username to use your fork
@@ -35,19 +36,15 @@ RUN mkdir "$pandas_home" \
     && git remote add upstream "https://github.com/pandas-dev/pandas.git" \
     && git pull upstream main
 
-# Because it is surprisingly difficult to activate a conda environment inside a DockerFile
-# (from personal experience and per https://github.com/ContinuumIO/docker-images/issues/89),
-# we just update the base/root one from the 'environment.yml' file instead of creating a new one.
-#
 # Set up environment
 RUN conda install -y mamba
-RUN mamba env update -n base -f "$pandas_home/environment.yml"
+RUN mamba env create --name pandas-dev -f "$pandas_home/environment.yml"
 
 # Build C extensions and pandas
 SHELL ["/bin/bash", "-c"]
 RUN . /opt/conda/etc/profile.d/conda.sh \
-    && conda activate base \
+    && conda activate pandas-dev \
     && cd "$pandas_home" \
     && export \
     && python setup.py build_ext -j 4 \
-    && python -m pip install --no-build-isolation -e .
+    && python -m pip install -e . --no-build-isolation
