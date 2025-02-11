@@ -1,4 +1,5 @@
 main:
+  base_url: "pt"
   templates_path: _templates
   base_template: "layout.html"
   production_url: "https://pandas.pydata.org/"
@@ -58,6 +59,7 @@ navbar:
       target: community/benchmarks.html
   - name: "Contribute"
     target: contribute.html
+
 blog:
   num_posts: 50
   posts_path: community/blog
@@ -175,7 +177,7 @@ sponsors:
     description: "Matthew Roeschke"
   - name: "Intel"
     url: https://www.intel.com/
-    logo: /static/img/partners/intel.svg
+    logo: static/img/partners/intel.svg
     kind: partner
     description: "Brock Mendel"
   - name: "Tidelift"
